@@ -35,15 +35,21 @@ $__pantheon-columns: false !global;
 	@extend %cf;
 
 	@if $__pantheon-padding != false {
-		padding-left: $__pantheon-padding;
-		padding-right: $__pantheon-padding;
+		margin-left: $__pantheon-padding;
+		margin-right: $__pantheon-padding;
 	}
 
 	@each $rule in $bps {
 		$bp: nth($rule, 1);
 		$size: nth($rule, 2);
 		@include bp($bp) {
-			width: ($fraction * $size);
+
+			@if $__pantheon-padding != false {
+				width: calc(#{($fraction * $size)} - #{($__pantheon-padding * 2)})
+			} @else {
+				width: ($fraction * $size);
+			}
+
 			@if length($rule) == 3 {
 				$offset: nth($rule, 3);
 				@include has-offset($bp $offset);
@@ -60,7 +66,12 @@ $__pantheon-columns: false !global;
 
 	@each $rule in $bps {
 		@include bp(nth($rule, 1)) {
-			margin-left: ($fraction * nth($rule, 2));
+
+			@if $__pantheon-padding != false {
+				margin-left: calc(#{($fraction * nth($rule, 2))} + #{$__pantheon-padding});
+			} @else {
+				margin-left: ($fraction * nth($rule, 2));
+			}
 		}
 	}
 }
