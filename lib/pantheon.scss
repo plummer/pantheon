@@ -76,6 +76,39 @@ $__pantheon-columns: false !global;
 	}
 }
 
+@mixin child-has-parent-offset($parentColsCount, $currentColsCount, $bps...) {
+
+	$parentColsMultiplier: $parentColsCount / $currentColsCount;
+	$currentColsMultiplier: $currentColsCount / $parentColsCount;
+	$paddingModifier: 1;
+
+	@if $__pantheon-columns == false {
+		@warn "is-column called outside of is-plan.";
+	}
+	$fraction: 100% / $__pantheon-columns;
+
+	@each $rule in $bps {
+		@include bp(nth($rule, 1)) {
+
+			$paddingModifier: 1;
+			$offsetAmount: ($fraction * nth($rule, 2)) * $parentColsMultiplier;
+
+			@if nth($rule, 2) < 1.0 {
+				$paddingModifier: -1;
+			}
+
+			@if $__pantheon-padding != false {
+				margin-left: calc(#{$offsetAmount} + #{$__pantheon-padding * $paddingModifier} );
+				width: calc(#{$offsetAmount * -1} + 100%);
+			} @else {
+				margin-left: offsetAmount;
+				width: calc(#{$offsetAmount * -1} + 100%);
+			}
+		}
+	}
+}
+
+
 @mixin has-padding($padding) {
 	$__pantheon-padding: $padding !global;
 	margin-left: -$__pantheon-padding;
