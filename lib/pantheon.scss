@@ -80,6 +80,9 @@ $__pantheon-columns: false !global;
 
 	$parentColsMultiplier: $parentColsCount / $currentColsCount;
 	$currentColsMultiplier: $currentColsCount / $parentColsCount;
+
+
+
 	$paddingModifier: 1;
 
 	@if $__pantheon-columns == false {
@@ -91,18 +94,20 @@ $__pantheon-columns: false !global;
 		@include bp(nth($rule, 1)) {
 
 			$paddingModifier: 1;
-			$offsetAmount: ($fraction * nth($rule, 2)) * $parentColsMultiplier;
+
+			$offsetColumnCount: ($fraction * nth($rule, 2));
 
 			@if nth($rule, 2) < 1.0 {
 				$paddingModifier: -1;
 			}
 
 			@if $__pantheon-padding != false {
-				margin-left: calc(#{$offsetAmount} + #{$__pantheon-padding * $paddingModifier} );
-				width: calc(#{$offsetAmount * -1} + 100%);
+				margin-left: calc(( (100% + #{$__pantheon-padding * 2}) / #{$currentColsCount} * #{nth($rule, 2)});
+				width: calc(((100% + #{$__pantheon-padding * 2}) / #{$currentColsCount} * #{$currentColsCount + nth($rule, 2) * $paddingModifier} - #{$__pantheon-padding * 2});
+				// width: calc(((100% + 16px) / 8 * 10) - 16px);
 			} @else {
 				margin-left: offsetAmount;
-				width: calc(#{$offsetAmount * -1} + 100%);
+				width: calc(#{$offsetColumnCount * -1} + 100%);
 			}
 		}
 	}
